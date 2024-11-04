@@ -1,0 +1,26 @@
+{
+  "name": "bot03",
+  "version": "1.0.0",
+  "description": "The bot collects data on the value of cryptocurrencies and shows this data to the user along with price changes.",
+  "main": "bot.js",
+  "scripts": {
+    "start": "nodemon bot.js",
+    "start:debug": "nodemon --inspect bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node.js",
+    "telegraf.js",
+    "cryptocurrence"
+  ],
+  "author": "vikornienko",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
