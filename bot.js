@@ -3,6 +3,7 @@ import { message } from "telegraf/filters";
 
 import "dotenv/config.js";
 import axios from "axios";
+import schedule from "node-schedule";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -30,6 +31,28 @@ bot.command('getinfo', async (ctx) => {
     console.log(ratesArray);
 })
 
+bot.command("timerset", async (ctx) => {
+    ctx.replyWithHTML("Отправьте время напоминания в формате\n <b>ДД.ММ.ГГГГ ЧЧ:ММ:СС</b>");
+});
+
+bot.on(message("text"), async (ctx) => {
+    const dateInput = ctx.update.message.text;
+    const date = parseDate(dateInput);
+    if (date) {
+        schedule.scheduleJob(date, () => {
+            ctx.reply("Отправьте команду /getinfo");
+        });
+        await ctx.reply(`Напоминание установлено на ${date}`);
+    } else {
+        await ctx.reply("Неправильный формат времени. Пожалуйста, используйте формат ДД.ММ.ГГГГ ЧЧ:ММ:СС");
+    } 
+});
+const parseDate = (dateStr) => {
+    const [day, month, year, hour, minute, second] = dateStr.split(/[\s.:]/).map(Number);
+    const date = new Date(year, month - 1, day, hour, minute, second);
+    return isNaN(date.getTime()) ? null : date;
+};
+
 const getRates = async () => {
     const result = await axios({
       method: "GET",
@@ -37,6 +60,8 @@ const getRates = async () => {
       headers: { "X-CMC_PRO_API_KEY": process.env.API_KEY },
     });
     return result.data.data
-}
+};
+
+
 
 bot.launch();
