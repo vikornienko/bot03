@@ -53,14 +53,27 @@ const parseDate = (dateStr) => {
     return isNaN(date.getTime()) ? null : date;
 };
 
+// const getRates = async () => {
+//     const result = await axios({
+//       method: "GET",
+//       url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+//       headers: { "X-CMC_PRO_API_KEY": process.env.API_KEY },
+//     });
+//     return result.data.data
+// };
+
 const getRates = async () => {
-    const result = await axios({
-      method: "GET",
-      url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
-      headers: { "X-CMC_PRO_API_KEY": process.env.API_KEY },
-    });
-    return result.data.data
-};
+    try {
+        const result = await axios({
+            method: "GET",
+            url: "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+            headers: { "X-CMC_PRO_API_KEY": process.env.API_KEY },
+        });
+        return result.data.data;
+    } catch (error) {
+        console.error("Error fetching rates:", error);
+        return []; }
+    };
 
 
 
